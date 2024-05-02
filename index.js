@@ -8,11 +8,13 @@ const options = yargs
   .option('t', { alias: 'token', describe: 'Your access token for GitHub', type: 'string', demandOption: true })
   .option('s', { alias: 'secret', describe: 'The name of the secret to deploy', type: 'string', demandOption: true })
   .option('v', { alias: 'value', describe: 'The value of the option to deploy', type: 'string', demandOption: true })
+  .option('o', { alias: 'org', describe: 'The name of the organization to deploy to', type: 'string', demandOption: true})
   .argv;
 
 const token = options.token;
 const secretName = options.secret;
 const secretValue = options.value;
+const org = options.value;
 
 /**
  * Encrypts a secret using the specified salt
@@ -37,27 +39,27 @@ async function main() {
   });
 
   const iterator = await octokit.paginate.iterator(octokit.rest.repos.listForOrg, {
-    org: 'UCF'
+    org: org
   });
 
   for await (const { data: repositories } of iterator) {
     for (const repo of repositories) {
       const secrets = await octokit.rest.actions.listRepoSecrets({
-        owner: 'UCF',
+        owner: org,
         repo: repo.name
       });
 
       for (const secret of secrets.data.secrets) {
         if (secret.name === secretName) {
           const publicKey = await octokit.rest.actions.getRepoPublicKey({
-            owner: 'UCF',
+            owner: org,
             repo: repo.name
           });
 
           const encryptedSecret = encryptSecret(publicKey.data.key, secretValue);
 
           const response = await octokit.rest.actions.createOrUpdateRepoSecret({
-            owner: 'UCF',
+            owner: org,
             repo: repo.name,
             secret_name: secretName,
             encrypted_value: encryptedSecret,
