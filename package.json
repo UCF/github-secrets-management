@@ -1,0 +1,28 @@
+{
+  "name": "secretsmanage",
+  "version": "1.0.0",
+  "description": "Terminal application for distributing github action secrets",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UCF/secretsmanage.git"
+  },
+  "keywords": [
+    "Node",
+    "GitHub"
+  ],
+  "author": "UCF Web Communications",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/UCF/secretsmanage/issues"
+  },
+  "homepage": "https://github.com/UCF/secretsmanage#readme",
+  "dependencies": {
+    "libsodium-wrappers": "^0.7.13",
+    "octokit": "^3.2.0",
+    "yargs": "^17.7.2"
+  }
+}
